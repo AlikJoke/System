@@ -27,4 +27,11 @@ public interface ImageHolder {
 	 */
 	@NotNull
 	List<File> getImages();
+
+	/**
+	 * Возвращает количество страниц pdf.
+	 * 
+	 * @return
+	 */
+	int size();
 }

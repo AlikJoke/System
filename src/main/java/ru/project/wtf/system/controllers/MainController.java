@@ -1,19 +1,11 @@
 package ru.project.wtf.system.controllers;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
 
-import javax.imageio.ImageIO;
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javafx.fxml.FXML;
@@ -43,13 +35,14 @@ public class MainController extends BaseController {
 	private SecurityContext securutyContext;
 
 	@Override
+	@PostConstruct
 	public void init() {
-
+		loadPdf(0);
 	}
 
 	@Override
 	public void initialize() {
-		loadPdf(0);
+
 	}
 
 	@FXML
@@ -60,32 +53,12 @@ public class MainController extends BaseController {
 
 	@NotNull
 	private ImageView loadPdf(final int pageNum) {
-		if (pageNum < 0) {
+		if (pageNum < 0 || imageHolder.size() < pageNum) {
 			throw new IllegalArgumentException();
 		}
 
-		final InputStream is = this.getClass().getClassLoader().getResourceAsStream("importdata/theory.pdf");
-		if (is == null) {
-			throw new RuntimeException();
-		}
-
 		try {
-			final PDDocument pdf = PDDocument.load(is);
-			final List<File> files = new LinkedList<>();
-			final List<PDPage> pages = pdf.getDocumentCatalog().getAllPages();
-			pages.forEach(page -> {
-				try {
-					final File file = new File(UUID.randomUUID().toString());
-					final BufferedImage image = page.convertToImage();
-					ImageIO.write(image, "png", file);
-					files.add(file);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-
-			});
-
-			imageView.setImage(new Image(new FileInputStream(files.get(pageNum))));
+			imageView.setImage(new Image(new FileInputStream(imageHolder.getImages().get(pageNum))));
 			imageView.setFitWidth(600.0);
 			imageView.setFitHeight(800.0);
 		} catch (IOException e) {
