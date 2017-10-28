@@ -71,7 +71,12 @@ public class AuthController extends BaseController {
 
 	@Override
 	public void init() {
-		toggleStudent.setSelected(true);
+		
+	}
+	
+	@Override
+	public void initialize() {
+		toggleTeacher.setSelected(true);
 	}
 
 	@FXML
