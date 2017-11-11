@@ -2,14 +2,17 @@ package ru.project.wtf.system.testloader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -25,7 +28,9 @@ public class TestLoaderImpl implements TestLoader {
 	private static final String QUESTION_BLOCK_MARKER = "question-block";
 	private static final String QUESTION_MARKER = "question";
 	private static final String VARIANT_MARKER = "variant";
-	private static final String ANSWER_MARKER = "answer";
+
+	private static final String ID_ATTRIBUTE = "id";
+	private static final String IS_TRUE_ATTRIBUTE = "isTrue";
 
 	@Override
 	public Test load(final String directory, final String fileName) {
@@ -53,23 +58,31 @@ public class TestLoaderImpl implements TestLoader {
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					final Element elem = (Element) node;
 					final String question = elem.getElementsByTagName(QUESTION_MARKER).item(0).getTextContent();
-					final String answer = elem.getElementsByTagName(ANSWER_MARKER).item(0).getTextContent();
 					final List<File> images = new LinkedList<>();
-					final List<String> variants = new LinkedList<>();
+					final Map<Integer, Variant> variants = new LinkedHashMap<>();
 
 					final NodeList imageNodes = elem.getElementsByTagName(IMAGE_MARKER);
 					for (int j = 0; j < imageNodes.getLength(); j++) {
 						final Node imageNode = imageNodes.item(j);
-						images.add(FileUtils.convertStreamToFile(directory, imageNode.getTextContent()));
+						if (StringUtils.hasLength(imageNode.getTextContent())) {
+							images.add(FileUtils.convertStreamToFile(directory, imageNode.getTextContent()));
+						}
 					}
 
 					final NodeList variantNodes = elem.getElementsByTagName(VARIANT_MARKER);
 					for (int j = 0; j < variantNodes.getLength(); j++) {
 						final Node variantNode = variantNodes.item(j);
-						variants.add(variantNode.getTextContent());
+						final Integer variantId = Integer
+								.parseInt(variantNode.getAttributes().getNamedItem(ID_ATTRIBUTE).getTextContent());
+						final Boolean isTrue = variantNode.getAttributes().getNamedItem(IS_TRUE_ATTRIBUTE) == null
+								? false
+								: Boolean.parseBoolean(
+										variantNode.getAttributes().getNamedItem(IS_TRUE_ATTRIBUTE).getTextContent());
+						final Variant variant = new Variant(variantId, variantNode.getTextContent(), isTrue);
+						variants.put(variantId, variant);
 					}
 
-					questions.add(new Question(question, answer, variants, images));
+					questions.add(new Question(i + 1, question, variants, images));
 				}
 			}
 

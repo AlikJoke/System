@@ -1,8 +1,12 @@
 package ru.project.wtf.system.testloader;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
@@ -18,10 +22,10 @@ import ru.project.wtf.system.utils.NotNullOrEmpty;
  */
 public class Question {
 
+	private final Integer id;
 	private final String question;
-	private final List<String> variants;
+	private final Map<Integer, Variant> variants;
 	private final List<File> images;
-	private final String aswer;
 
 	@NotNullOrEmpty
 	public String getQuestion() {
@@ -29,8 +33,18 @@ public class Question {
 	}
 
 	@NotNullOrEmpty
-	public List<String> getVariants() {
+	public List<Variant> getVariants() {
+		return new ArrayList<>(variants.values());
+	}
+
+	@NotNull
+	public Map<Integer, Variant> getVariantsMap() {
 		return variants;
+	}
+
+	@NotNull
+	public Integer getId() {
+		return id;
 	}
 
 	@NotNull
@@ -38,18 +52,18 @@ public class Question {
 		return images;
 	}
 
-	@NotNullOrEmpty
-	public String getAswer() {
-		return aswer;
+	public List<Integer> getRightVariants() {
+		return getVariants().stream().filter(variant -> variant.isTrue()).map(var -> var.getId())
+				.collect(Collectors.toList());
 	}
 
-	public Question(@NotNullOrEmpty final String question, @NotNullOrEmpty final String aswer,
-			@NotNullOrEmpty final List<String> variants, final List<File> images) {
+	public Question(@NotNull final Integer id, @NotNullOrEmpty final String question,
+			@NotNullOrEmpty final Map<Integer, Variant> variants, @NotNull final List<File> images) {
 		super();
+		this.id = id;
 		this.question = question;
-		this.aswer = aswer;
-		this.variants = new LinkedList<>();
-		this.variants.addAll(variants);
+		this.variants = new LinkedHashMap<>();
+		this.variants.putAll(variants);
 		this.images = new LinkedList<>();
 		this.images.addAll(images);
 	}

@@ -1,16 +1,20 @@
 package ru.project.wtf.system.controllers;
 
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
 import org.controlsfx.control.ToggleSwitch;
 import org.controlsfx.control.textfield.CustomPasswordField;
 import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import ru.project.wtf.system.SystemApplication;
@@ -77,15 +81,38 @@ public class AuthController extends BaseController {
 	@Override
 	public void initialize() {
 		toggleTeacher.setSelected(true);
+		setupClearButtonField(loginField);
+		setupClearButtonField(surnameField);
+		setupClearButtonField(nameField);
+		setupClearButtonField(groupField);
 	}
-
+	
+	private void setupClearButtonField (CustomTextField customTextField) {
+		try {
+            Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+            m.setAccessible(true);
+            m.invoke(null, customTextField, customTextField.rightProperty());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+	}
+	
+	@Override
+	public void refresh() {
+		this.loginField.clear();
+		this.passwordField.clear();
+		this.groupField.clear();
+		this.nameField.clear();
+		this.surnameField.clear();
+	}
+	
 	@FXML
 	public void actionButtonPressed() {
 		final User user;
 		final String id;
 		final String password;
 		if (toggleStudent.isSelected()) {
-			if (!validateStudentInfo()) {
+			if (validateStudentInfo()) {
 				return;
 			}
 

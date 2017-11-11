@@ -204,7 +204,7 @@
             <Insets bottom="5.0" left="7.0" right="7.0" top="5.0" />
          </VBox.margin>
       </VBox>
-      <Button id="button" fx:id="loginButton" mnemonicParsing="false" onAction="#actionButtonPressed" prefWidth="70.0" text="Войти">
+      <Button id="button" fx:id="loginButton" mnemonicParsing="false" onAction="#actionButtonPressed" prefWidth="100.0" text="Войти">
          <font>
             <Font name="Times New Roman" size="16.0" />
          </font>

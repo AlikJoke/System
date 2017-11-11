@@ -13,7 +13,7 @@ import javax.annotation.PreDestroy;
 import javax.imageio.ImageIO;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -33,7 +33,6 @@ public class ImageHolderImpl implements ImageHolder {
 		return images;
 	}
 
-	@SuppressWarnings("unchecked")
 	@PostConstruct
 	private void loadPdf() throws IOException {
 		final String path;
@@ -47,22 +46,19 @@ public class ImageHolderImpl implements ImageHolder {
 		}
 
 		final PDDocument pdf = PDDocument.load(is);
+		PDFRenderer renderer = new PDFRenderer(pdf);
 		final List<File> files = new LinkedList<>();
-		final List<PDPage> pages = pdf.getDocumentCatalog().getAllPages();
-		pages.forEach(page -> {
-			try {
-				final File file = new File(UUID.randomUUID().toString());
-				final BufferedImage image = page.convertToImage();
-				ImageIO.write(image, "png", file);
-				files.add(file);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+		final int count = pdf.getDocumentCatalog().getPages().getCount();
 
-		});
+		for (int i = 0; i < count; i++) {
+			final File file = new File(UUID.randomUUID().toString() + ".png");
+			BufferedImage image = renderer.renderImage(i);
+			ImageIO.write(image, "png", file);
+			files.add(file);
+			file.deleteOnExit();
+		}
 
 		images.addAll(files);
-
 	}
 
 	@PreDestroy

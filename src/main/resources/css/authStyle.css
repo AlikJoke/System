@@ -1,23 +1,26 @@
 #button {
-    -fx-min-width: 100px;
-    -fx-border-color: rgba(0, 0, 0, 0.07);
+    -fx-background-color:
+            rgba(0,0,0,0.08),
+            linear-gradient(#9a9a9a, #909090),
+            linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-background-radius: 5,5,4;
+    -fx-padding: 3 30 3 30;
+    -fx-text-fill: #242d35;
+    -fx-font-size: 14px;
+}
+#button:pressed {
+    -fx-background-color: #f3f3f3;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
 }
 #mPanel {
-    -fx-background-color: snow;
+    -fx-background-color: #ffffff;
 }
 #vPanel {
     -fx-background-color: rgba(0, 0, 0, 0.07);
     -fx-border-radius: 5px;
     -fx-border-color: #66ccff;
     -fx-border-width: 2px;
-}
-#login:focused, #password:focused {
-    -fx-border-color: #66ccff;
-}
-#button:hover {
-    -fx-border-color: #66ccff;
-    -fx-border-width: 2px;
-    -fx-border-radius: 5px;
 }
 .toggle:selected .thumb-area{
     -fx-background-color: #66ccff;

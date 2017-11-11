@@ -41,4 +41,8 @@ public abstract class BaseController {
 		System.runFinalization();
 		System.exit(0);
 	}
+	
+	public void refresh() {
+		
+	}
 }
