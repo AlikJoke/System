@@ -1,7 +1,7 @@
 package ru.project.wtf.system.pdf;
 
 import java.io.File;
-import java.util.List;
+import java.io.IOException;
 
 import javax.validation.constraints.NotNull;
 
@@ -13,20 +13,21 @@ import javax.validation.constraints.NotNull;
  * @since 24.10.2017
  *
  */
-public interface ImageHolder {
+public interface PdfHolder {
 
 	/**
 	 * Возвращает список сохраненных ранее png.
 	 * <p>
 	 * 
 	 * @see File
+	 * @see Theory
 	 * 
 	 * @return не может быть {@code null}.
 	 * @throws IllegalStateException
 	 *             если сохраненного объекта нет.
 	 */
 	@NotNull
-	List<File> getImages();
+	Theory getPdf();
 
 	/**
 	 * Возвращает количество страниц pdf.
@@ -34,4 +35,12 @@ public interface ImageHolder {
 	 * @return
 	 */
 	int size();
+
+	/**
+	 * Производит подмену файла теории и нарезает файл теории на страницы.
+	 * 
+	 * @throws IOException
+	 * 
+	 */
+	void reload() throws IOException;
 }

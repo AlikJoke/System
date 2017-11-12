@@ -7,10 +7,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
@@ -19,10 +22,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import ru.project.wtf.system.external.HasExternalSourceAbstract;
+import ru.project.wtf.system.properties.Properties;
 import ru.project.wtf.system.utils.FileUtils;
 
 @Service
-public class TestLoaderImpl implements TestLoader {
+public class TestLoaderImpl extends HasExternalSourceAbstract implements TestLoader {
 
 	private static final String IMAGE_MARKER = "image-name";
 	private static final String QUESTION_BLOCK_MARKER = "question-block";
@@ -32,9 +37,23 @@ public class TestLoaderImpl implements TestLoader {
 	private static final String ID_ATTRIBUTE = "id";
 	private static final String IS_TRUE_ATTRIBUTE = "isTrue";
 
+	@Autowired
+	private Properties props;
+
 	@Override
 	public Test load(final String directory, final String fileName) {
-		final File file = FileUtils.convertStreamToFile(directory, fileName);
+		final File file;
+		File newFile = new File(props.getProperty("test.file.name"));
+		if (newFile.exists() && newFile.canRead()) {
+			file = newFile;
+		} else {
+			if (newFile != null) {
+				newFile.delete();
+			}
+			file = FileUtils.convertStreamToFile(directory, fileName);
+			file.deleteOnExit();
+		}
+
 		if (!file.exists()) {
 			throw new IllegalArgumentException(
 					String.format("File not exists with name = %s in directory = %s!", directory, fileName));
@@ -43,6 +62,11 @@ public class TestLoaderImpl implements TestLoader {
 		if (!file.canRead()) {
 			throw new IllegalArgumentException(
 					String.format("File is not readable with name = %s in directory = %s!", directory, fileName));
+		}
+
+		if (!FileUtils.XML_EXTENSION.equalsIgnoreCase(FilenameUtils.getExtension(fileName))) {
+			throw new IllegalArgumentException(
+					String.format("File isn't valid xml file. Filename = %s in directory = %s!", directory, fileName));
 		}
 
 		final List<Question> questions = new LinkedList<>();
@@ -76,8 +100,10 @@ public class TestLoaderImpl implements TestLoader {
 								.parseInt(variantNode.getAttributes().getNamedItem(ID_ATTRIBUTE).getTextContent());
 						final Boolean isTrue = variantNode.getAttributes().getNamedItem(IS_TRUE_ATTRIBUTE) == null
 								? false
-								: Boolean.parseBoolean(
-										variantNode.getAttributes().getNamedItem(IS_TRUE_ATTRIBUTE).getTextContent());
+								: StringUtils.isEmpty(
+										variantNode.getAttributes().getNamedItem(IS_TRUE_ATTRIBUTE).getTextContent())
+										|| Boolean.parseBoolean(variantNode.getAttributes()
+												.getNamedItem(IS_TRUE_ATTRIBUTE).getTextContent());
 						final Variant variant = new Variant(variantId, variantNode.getTextContent(), isTrue);
 						variants.put(variantId, variant);
 					}
@@ -93,9 +119,13 @@ public class TestLoaderImpl implements TestLoader {
 	}
 
 	@Override
-	public void replace(File file) {
-		// TODO Auto-generated method stub
+	public void upload(@NotNull final Test object) {
+		upload(object.getSourceFile());
+	}
 
+	@Override
+	public String getSourceKey() {
+		return "external.source.test";
 	}
 
 }

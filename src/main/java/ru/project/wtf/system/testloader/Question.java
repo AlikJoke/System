@@ -37,6 +37,10 @@ public class Question {
 		return new ArrayList<>(variants.values());
 	}
 
+	public String getQuestionTitle() {
+		return id + ". " + question;
+	}
+
 	@NotNull
 	public Map<Integer, Variant> getVariantsMap() {
 		return variants;

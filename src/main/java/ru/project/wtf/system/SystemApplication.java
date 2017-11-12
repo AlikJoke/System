@@ -46,7 +46,7 @@ public class SystemApplication extends JavaFxApplication {
 	@Override
 	public void start(final Stage primaryStage) {
 		stageHolder.holdStage(primaryStage);
-		primaryStage.setTitle(this.props.getProperty("fx.ui.title"));
+		primaryStage.setTitle(props.getProperty("fx.ui.title"));
 		primaryStage.getIcons().add(new Image("img/kaf22.ico"));
 		primaryStage.setScene(new Scene(view.getView()));
 		primaryStage.setResizable(false);
@@ -74,6 +74,7 @@ public class SystemApplication extends JavaFxApplication {
 			stageHolder.getStage().setMinWidth(900);
 			stageHolder.getStage().setMaximized(true);
 			stageHolder.getStage().centerOnScreen();
+			stageHolder.getStage().setTitle(props.getProperty("fx.ui.main.title"));
 		} else {
 			stageHolder.getStage().centerOnScreen();
 			stageHolder.getStage().setMinHeight(400);

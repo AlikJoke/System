@@ -25,4 +25,9 @@ public interface TestHolder {
 	 */
 	@NotNull
 	Test get();
+
+	/**
+	 * Инициирует перезагрузку файла теста и его дальнейший парсинг.
+	 */
+	void initReload();
 }
