@@ -2,6 +2,7 @@ package ru.project.wtf.system.testloader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,9 +34,14 @@ public class TestLoaderImpl extends HasExternalSourceAbstract implements TestLoa
 	private static final String QUESTION_BLOCK_MARKER = "question-block";
 	private static final String QUESTION_MARKER = "question";
 	private static final String VARIANT_MARKER = "variant";
+	private static final String COMPLEXITY_MARKER = "complexity";
+	private static final String FIRST_TEST_TIME_MARKER = "first-test-time";
+	private static final String SECOND_TEST_TIME_MARKER = "second-test-time";
+	private static final String FIRST_TEST_QUESTIONS_COUNT_MARKER = "first-test-questions-count";
+	private static final String SECOND_TEST_QUESTIONS_COUNT_MARKER = "second-test-questions-count";
+	private static final String ANSWER_MARKER = "answer";
 
 	private static final String ID_ATTRIBUTE = "id";
-	private static final String IS_TRUE_ATTRIBUTE = "isTrue";
 
 	@Autowired
 	private Properties props;
@@ -76,20 +82,50 @@ public class TestLoaderImpl extends HasExternalSourceAbstract implements TestLoa
 			final Document doc = builder.parse(file);
 
 			doc.getDocumentElement().normalize();
+			final Integer firstTestTime = Integer
+					.parseInt(doc.getElementsByTagName(FIRST_TEST_TIME_MARKER).item(0).getTextContent());
+			final Integer secondTestTime = Integer
+					.parseInt(doc.getElementsByTagName(SECOND_TEST_TIME_MARKER).item(0).getTextContent());
+			final Integer firstTestQuestionsCount = Integer
+					.parseInt(doc.getElementsByTagName(FIRST_TEST_QUESTIONS_COUNT_MARKER).item(0).getTextContent());
+			final Integer secondTestQuestionsCount = Integer
+					.parseInt(doc.getElementsByTagName(SECOND_TEST_QUESTIONS_COUNT_MARKER).item(0).getTextContent());
+
 			final NodeList nodes = doc.getElementsByTagName(QUESTION_BLOCK_MARKER);
 			for (int i = 0; i < nodes.getLength(); i++) {
 				final Node node = nodes.item(i);
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					final Element elem = (Element) node;
 					final String question = elem.getElementsByTagName(QUESTION_MARKER).item(0).getTextContent();
+					final String complexityString = elem.getElementsByTagName(COMPLEXITY_MARKER).item(0)
+							.getTextContent();
+					final Integer complexity;
+					if (StringUtils.hasLength(complexityString)) {
+						complexity = Integer.parseInt(complexityString) > 3 ? 3 : Integer.parseInt(complexityString);
+					} else {
+						complexity = 1;
+					}
+
 					final List<File> images = new LinkedList<>();
 					final Map<Integer, Variant> variants = new LinkedHashMap<>();
+					final List<String> answers = new ArrayList<>();
 
 					final NodeList imageNodes = elem.getElementsByTagName(IMAGE_MARKER);
 					for (int j = 0; j < imageNodes.getLength(); j++) {
 						final Node imageNode = imageNodes.item(j);
 						if (StringUtils.hasLength(imageNode.getTextContent())) {
-							images.add(FileUtils.convertStreamToFile(directory, imageNode.getTextContent()));
+							final File imageFile = FileUtils.convertStreamToFileIfNotExists(directory,
+									imageNode.getTextContent());
+							if (imageFile != null) {
+								images.add(imageFile);
+							}
+						}
+					}
+					final NodeList answerNodes = elem.getElementsByTagName(ANSWER_MARKER);
+					for (int j = 0; j < answerNodes.getLength(); j++) {
+						final Node anwerNode = answerNodes.item(j);
+						if (StringUtils.hasLength(anwerNode.getTextContent())) {
+							answers.add(anwerNode.getTextContent());
 						}
 					}
 
@@ -98,21 +134,16 @@ public class TestLoaderImpl extends HasExternalSourceAbstract implements TestLoa
 						final Node variantNode = variantNodes.item(j);
 						final Integer variantId = Integer
 								.parseInt(variantNode.getAttributes().getNamedItem(ID_ATTRIBUTE).getTextContent());
-						final Boolean isTrue = variantNode.getAttributes().getNamedItem(IS_TRUE_ATTRIBUTE) == null
-								? false
-								: StringUtils.isEmpty(
-										variantNode.getAttributes().getNamedItem(IS_TRUE_ATTRIBUTE).getTextContent())
-										|| Boolean.parseBoolean(variantNode.getAttributes()
-												.getNamedItem(IS_TRUE_ATTRIBUTE).getTextContent());
-						final Variant variant = new Variant(variantId, variantNode.getTextContent(), isTrue);
+						final Variant variant = new Variant(variantId, variantNode.getTextContent());
 						variants.put(variantId, variant);
 					}
 
-					questions.add(new Question(i + 1, question, variants, images));
+					questions.add(new Question(i + 1, question, variants, images, complexity, answers));
 				}
 			}
 
-			return new Test(file, questions);
+			return new Test(file, questions, firstTestQuestionsCount, secondTestQuestionsCount, firstTestTime,
+					secondTestTime);
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			throw new RuntimeException(e);
 		}

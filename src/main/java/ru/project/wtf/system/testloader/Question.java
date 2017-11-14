@@ -2,6 +2,7 @@ package ru.project.wtf.system.testloader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,10 +27,16 @@ public class Question {
 	private final String question;
 	private final Map<Integer, Variant> variants;
 	private final List<File> images;
+	private final Integer complexity;
+	private final List<String> answer;
 
 	@NotNullOrEmpty
 	public String getQuestion() {
 		return question;
+	}
+
+	public List<String> getAnswer() {
+		return answer;
 	}
 
 	@NotNullOrEmpty
@@ -37,8 +44,14 @@ public class Question {
 		return new ArrayList<>(variants.values());
 	}
 
+	@NotNullOrEmpty
 	public String getQuestionTitle() {
 		return id + ". " + question;
+	}
+
+	@NotNull
+	public Integer getComplexity() {
+		return complexity;
 	}
 
 	@NotNull
@@ -57,12 +70,13 @@ public class Question {
 	}
 
 	public List<Integer> getRightVariants() {
-		return getVariants().stream().filter(variant -> variant.isTrue()).map(var -> var.getId())
-				.collect(Collectors.toList());
+		return variants.isEmpty() ? Collections.emptyList()
+				: answer.stream().map(answer -> Integer.parseInt(answer)).collect(Collectors.toList());
 	}
 
 	public Question(@NotNull final Integer id, @NotNullOrEmpty final String question,
-			@NotNullOrEmpty final Map<Integer, Variant> variants, @NotNull final List<File> images) {
+			@NotNull final Map<Integer, Variant> variants, @NotNull final List<File> images,
+			@NotNull final Integer complexity, @NotNull final List<String> answer) {
 		super();
 		this.id = id;
 		this.question = question;
@@ -70,6 +84,8 @@ public class Question {
 		this.variants.putAll(variants);
 		this.images = new LinkedList<>();
 		this.images.addAll(images);
+		this.complexity = complexity;
+		this.answer = answer;
 	}
 
 }

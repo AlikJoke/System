@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <test>
+	<first-test-questions-count>5</first-test-questions-count>
+	<second-test-questions-count>20</second-test-questions-count>
+	<first-test-time>5</first-test-time>
+	<second-test-time>15</second-test-time>
 	<question-block>
 		<question>Вопрос ?</question>
-		<variant id="1">Первый ответ</variant>
-		<variant id="2" isTrue="true">Второй ответ</variant>
+		<complexity>1</complexity>
+		<answer>10</answer>
 	</question-block>
 	<question-block>
 		<question>Вопрос ?</question>
 		<variant id="1" isTrue="true">Первый ответ</variant>
 		<variant id="2">Второй ответ</variant>
+		<complexity>2</complexity>
 	</question-block>
 	<question-block>
 		<question>Вопрос ?</question>
@@ -17,6 +22,7 @@
 		<variant id="2">Второй ответ</variant>
 		<variant id="3">Третий ответ</variant>
 		<variant id="4" isTrue="true">Четвертый ответ</variant>
+		<complexity>3</complexity>
 	</question-block>
 	<question-block>
 		<question>Вопрос ?</question>

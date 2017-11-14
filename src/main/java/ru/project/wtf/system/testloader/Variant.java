@@ -10,7 +10,6 @@ public class Variant {
 
 	private final Integer id;
 	private final String text;
-	private final boolean isTrue;
 
 	@NotNull
 	public Integer getId() {
@@ -22,15 +21,10 @@ public class Variant {
 		return text;
 	}
 
-	public boolean isTrue() {
-		return isTrue;
-	}
-
-	public Variant(@NotNull final Integer id, @NotNullOrEmpty final String text, final boolean isTrue) {
+	public Variant(@NotNull final Integer id, @NotNullOrEmpty final String text) {
 		super();
 		this.id = id;
 		this.text = text;
-		this.isTrue = isTrue;
 	}
 
 	@Override

@@ -294,6 +294,21 @@ public class MainController extends BaseController {
 		}
 	}
 
+	public void uploadPictureAction() throws FileNotFoundException {
+		final FileChooser fileChooser = new FileChooser();
+		final FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG, JPG, JPEG files", "*.png",
+				"*.jpeg", "*.jpg");
+		fileChooser.getExtensionFilters().add(extFilter);
+
+		final File selectedFile = fileChooser.showOpenDialog(null);
+		if (selectedFile != null && selectedFile.exists() && selectedFile.canRead() && FileUtils.PICTURES_EXTENTSIONS
+				.contains(FilenameUtils.getExtension(selectedFile.getName()).toLowerCase())) {
+			FileUtils.convertStreamToFile(new FileInputStream(selectedFile), selectedFile.getName());
+			testHolder.initReload();
+			refresh();
+		}
+	}
+
 	@FXML
 	public void downloadTestAction() {
 		final FileChooser fileChooser = new FileChooser();
