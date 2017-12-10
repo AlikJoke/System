@@ -1,32 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <test>
 	<first-test-questions-count>5</first-test-questions-count>
-	<second-test-questions-count>20</second-test-questions-count>
-	<first-test-time>5</first-test-time>
-	<second-test-time>15</second-test-time>
+	<second-test-questions-count>10</second-test-questions-count>
+	<first-test-time>7</first-test-time>
+	<second-test-time>20</second-test-time>
 	<question-block>
-		<question>Вопрос ?</question>
+		<question>Вопрос 1</question>
 		<complexity>1</complexity>
 		<answer>10</answer>
 	</question-block>
 	<question-block>
-		<question>Вопрос ?</question>
-		<variant id="1" isTrue="true">Первый ответ</variant>
-		<variant id="2">Второй ответ</variant>
-		<complexity>2</complexity>
+		<question>Вопрос 2</question>
+		<complexity>1</complexity>
+		<answer>66</answer>
 	</question-block>
 	<question-block>
-		<question>Вопрос ?</question>
+		<question>Вопрос 3</question>
+		<complexity>1</complexity>
+		<answer>Нет</answer>
+	</question-block>
+	<question-block>
+		<question>Вопрос 4</question>
+		<complexity>1</complexity>
+		<variant id="1">Первый ответ</variant>
+		<variant id="2">Второй ответ</variant>
+		<answer>1</answer>
+		<answer>2</answer>
+	</question-block>
+	<question-block>
+		<question>Вопрос 5</question>
+		<complexity>1</complexity>
+		<answer>ррррр</answer>
+	</question-block>
+	<question-block>
+		<question>Вопрос 6</question>
+		<complexity>1</complexity>
+		<variant id="1">Первый ответ 2</variant>
+		<variant id="2">Второй ответ 2</variant>
+		<answer>2</answer>
+	</question-block>
+	
+	<question-block>
+		<question>Вопрос 2__1</question>
+		<variant id="1">Первый ответ</variant>
+		<variant id="2">Второй ответ</variant>
+		<complexity>2</complexity>
+		<answer>2</answer>
+	</question-block>
+	<question-block>
+		<question>Вопрос 2_2</question>
 		<image-name>graph1.png</image-name>
 		<variant id="1">Первый ответ</variant>
 		<variant id="2">Второй ответ</variant>
 		<variant id="3">Третий ответ</variant>
-		<variant id="4" isTrue="true">Четвертый ответ</variant>
-		<complexity>3</complexity>
+		<variant id="4">Четвертый ответ</variant>
+		<complexity>2</complexity>
+		<answer>4</answer>
 	</question-block>
 	<question-block>
-		<question>Вопрос ?</question>
+		<question>Вопрос 2_3</question>
 		<variant id="1">Первый ответ</variant>
-		<variant id="2" isTrue="true">Второй ответ</variant>
+		<variant id="2">Второй ответ</variant>
+		<variant id="3">Третий ответ</variant>
+		<variant id="4">Четвертый ответ</variant>
+		<complexity>2</complexity>
+		<answer>3</answer>
+	</question-block>
+	<question-block>
+		<question>Вопрос 3_1</question>
+		<variant id="1">Первый ответ</variant>
+		<variant id="2">Второй ответ</variant>
+		<complexity>3</complexity>
+		<answer>2</answer>
+	</question-block>
+	<question-block>
+		<question>Вопрос 3_2</question>
+		<complexity>3</complexity>
+		<answer>9888</answer>
+	</question-block>
+	<question-block>
+		<question>Вопрос 3_3</question>
+		<complexity>3</complexity>
+		<answer>3</answer>
 	</question-block>
 </test>

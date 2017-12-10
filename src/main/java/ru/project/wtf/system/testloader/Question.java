@@ -46,7 +46,7 @@ public class Question {
 
 	@NotNullOrEmpty
 	public String getQuestionTitle() {
-		return id + ". " + question;
+		return question;
 	}
 
 	@NotNull
