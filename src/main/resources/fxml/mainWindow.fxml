@@ -89,7 +89,7 @@
                               <Font name="Times New Roman Bold" size="17.0" />
                            </font>
                         </Label>
-                        <Button id="referenceButton" fx:id="referenceTheoryButton" layoutX="619.0" layoutY="16.0" mnemonicParsing="false" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="30.0">
+                        <Button id="referenceButton" fx:id="referenceTheoryButton" onAction="#openHelp" layoutX="619.0" layoutY="16.0" mnemonicParsing="false" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="30.0">
                            <graphic>
                               <ImageView fitHeight="150.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -133,7 +133,7 @@
                               <Font name="Times New Roman Bold" size="17.0" />
                            </font>
                         </Label>
-                        <Button id="referenceButton" fx:id="referenceFirstTestButton" layoutX="584.0" layoutY="139.0" mnemonicParsing="false" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="30.0">
+                        <Button id="referenceButton" fx:id="referenceFirstTestButton" onAction="#openHelp" layoutX="584.0" layoutY="139.0" mnemonicParsing="false" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="30.0">
                            <graphic>
                               <ImageView fitHeight="150.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -165,7 +165,7 @@
                               <Font name="Times New Roman Bold" size="17.0" />
                            </font>
                         </Label>
-                        <Button id="referenceButton" fx:id="referenceSecondTestButton" layoutX="584.0" layoutY="139.0" mnemonicParsing="false" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="30.0">
+                        <Button id="referenceButton" fx:id="referenceSecondTestButton" onAction="#openHelp" layoutX="584.0" layoutY="139.0" mnemonicParsing="false" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="30.0">
                            <graphic>
                               <ImageView fitHeight="150.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

@@ -3,6 +3,7 @@ package ru.project.wtf.system.loader;
 import javax.validation.constraints.NotNull;
 
 import ru.project.wtf.system.model.SystemObject;
+import ru.project.wtf.system.pdf.Reference;
 import ru.project.wtf.system.pdf.Theory;
 import ru.project.wtf.system.testloader.Test;
 import ru.project.wtf.system.utils.NotNullOrEmpty;
@@ -16,12 +17,13 @@ public interface Loader<T> {
 	 * 
 	 * @see Test
 	 * @see Theory
+	 * @see Reference
 	 * @see SystemObject
 	 * 
 	 * @param directory
 	 *            - путь до директории с тестом; может быть {@code null}.
 	 * @param fileName
-	 *            - имя файла с тестом; не может быть {@code null}/
+	 *            - имя файла с тестом; не может быть {@code null}.
 	 * @return не может быть {@code null}.
 	 */
 	@NotNull
@@ -33,7 +35,8 @@ public interface Loader<T> {
 	 * 
 	 * @see SystemObject
 	 * 
-	 * @param object - объект для выгрузки; не может быть {@code null}.
+	 * @param object
+	 *            - объект для выгрузки; не может быть {@code null}.
 	 */
 	void upload(@NotNull T object);
 }

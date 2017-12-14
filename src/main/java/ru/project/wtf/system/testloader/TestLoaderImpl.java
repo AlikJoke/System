@@ -14,7 +14,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
@@ -24,7 +23,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import ru.project.wtf.system.external.HasExternalSourceAbstract;
-import ru.project.wtf.system.properties.Properties;
 import ru.project.wtf.system.utils.FileUtils;
 
 @Service
@@ -43,13 +41,10 @@ public class TestLoaderImpl extends HasExternalSourceAbstract implements TestLoa
 
 	private static final String ID_ATTRIBUTE = "id";
 
-	@Autowired
-	private Properties props;
-
 	@Override
 	public Test load(final String directory, final String fileName) {
 		final File file;
-		File newFile = new File(props.getProperty("test.file.name"));
+		File newFile = new File(fileName);
 		if (newFile.exists() && newFile.canRead()) {
 			file = newFile;
 		} else {

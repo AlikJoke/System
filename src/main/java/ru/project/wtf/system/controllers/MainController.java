@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.io.FilenameUtils;
@@ -27,7 +28,10 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -37,12 +41,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.VBoxBuilder;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import ru.project.wtf.system.SystemApplication;
 import ru.project.wtf.system.modeling.ParametersProperties;
 import ru.project.wtf.system.pdf.PdfHolder;
+import ru.project.wtf.system.pdf.Reference;
+import ru.project.wtf.system.pdf.Theory;
 import ru.project.wtf.system.properties.Properties;
 import ru.project.wtf.system.testloader.Question;
 import ru.project.wtf.system.testloader.Test;
@@ -59,8 +70,11 @@ public class MainController extends BaseController {
 	@Autowired
 	private Properties props;
 
-	@Autowired
-	private PdfHolder pdfHolder;
+	@Resource(name = "theoryHolder")
+	private PdfHolder<Theory> theoryHolder;
+
+	@Resource(name = "referenceHolder")
+	private PdfHolder<Reference> referenceHolder;
 
 	@FXML
 	private ImageView imageView;
@@ -259,7 +273,7 @@ public class MainController extends BaseController {
 		} else {
 			timerLabelFirst.setVisible(false);
 			timerLabelSecond.setVisible(false);
-			
+
 			loadFirstTestToPane();
 			loadSecondTestToPane();
 		}
@@ -355,9 +369,73 @@ public class MainController extends BaseController {
 		if (selectedFile != null && selectedFile.exists() && selectedFile.canRead()
 				&& FileUtils.PDF_EXTENSION.equalsIgnoreCase(FilenameUtils.getExtension(selectedFile.getName()))) {
 			FileUtils.convertStreamToFile(new FileInputStream(selectedFile), props.getProperty("theory.file.name"));
-			pdfHolder.reload();
+			theoryHolder.reload();
 			refresh();
 		}
+	}
+
+	private int referenceCounter;
+
+	private void clearRefCounter() {
+		referenceCounter = 0;
+	}
+
+	@SuppressWarnings("deprecation")
+	@FXML
+	public void openHelp(ActionEvent event) {
+		final Stage myDialog = new Stage();
+		myDialog.initModality(Modality.WINDOW_MODAL);
+
+		Scene myDialogScene = new Scene(VBoxBuilder.create().children(createPopupContent()).alignment(Pos.CENTER)
+				.padding(new Insets(10)).build());
+
+		myDialog.setScene(myDialogScene);
+		myDialog.setTitle("Справка");
+		myDialog.setOnCloseRequest(new EventHandler<WindowEvent>() {
+
+			@Override
+			public void handle(WindowEvent t) {
+				clearRefCounter();
+			}
+		});
+
+		myDialog.setResizable(false);
+		myDialog.show();
+	}
+
+	private HBox createPopupContent() {
+		final ImageView left = createImageView(FileUtils.convertStreamToFile("img", "arrow-left.png"));
+		left.setFitWidth(25.0);
+		left.setFitHeight(25.0);
+		final ImageView right = createImageView(FileUtils.convertStreamToFile("img", "arrow-right.png"));
+		right.setFitWidth(25.0);
+		right.setFitHeight(25.0);
+
+		final HBox box = new HBox(5);
+		box.setAlignment(Pos.CENTER);
+		box.getChildren().setAll(left, getReferencePage(referenceCounter), right);
+		left.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent t) {
+				box.getChildren().clear();
+				box.getChildren().setAll(left, getReferencePage(--referenceCounter < 0 ? 0 : referenceCounter), right);
+			}
+		});
+
+		right.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent t) {
+				box.getChildren().clear();
+				box.getChildren().setAll(left,
+						getReferencePage(
+								referenceCounter == referenceHolder.size() - 1 ? referenceCounter : ++referenceCounter),
+						right);
+			}
+		});
+
+		return box;
 	}
 
 	private void fillArrayOfTextFieldXE() {
@@ -504,7 +582,7 @@ public class MainController extends BaseController {
 	}
 
 	public void arrowRightClicked(MouseEvent mouseEvent) {
-		if (pdfHolder.getPdf().getObjects().size() > counter + 1) {
+		if (theoryHolder.getPdf().getObjects().size() > counter + 1) {
 			loadPdf(++counter);
 		}
 	}
@@ -523,12 +601,12 @@ public class MainController extends BaseController {
 
 	@NotNull
 	private ImageView loadPdf(final int pageNum) {
-		if (pageNum < 0 || pdfHolder.getPdf().getObjects().size() < pageNum) {
+		if (pageNum < 0 || theoryHolder.getPdf().getObjects().size() < pageNum) {
 			throw new IllegalArgumentException();
 		}
 
 		try {
-			imageView.setImage(new Image(new FileInputStream(pdfHolder.getPdf().getObjects().get(pageNum))));
+			imageView.setImage(new Image(new FileInputStream(theoryHolder.getPdf().getObjects().get(pageNum))));
 			imageView.setFitWidth(500);
 			imageView.setFitHeight(800);
 		} catch (IOException e) {
@@ -536,6 +614,18 @@ public class MainController extends BaseController {
 		}
 
 		return imageView;
+	}
+
+	@NotNull
+	private ImageView getReferencePage(final int pageNum) {
+		if (pageNum < 0 || referenceHolder.getPdf().getObjects().size() <= pageNum) {
+			throw new IllegalArgumentException();
+		}
+
+		final ImageView result = createImageView(referenceHolder.getPdf().getObjects().get(pageNum));
+		result.setFitHeight(650);
+		result.setFitWidth(600);
+		return result;
 	}
 
 	@NotNull

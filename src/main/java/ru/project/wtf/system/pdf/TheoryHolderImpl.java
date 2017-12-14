@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 import ru.project.wtf.system.properties.Properties;
 
-@Component
-public class PdfHolderImpl implements PdfHolder {
+@Component("theoryHolder")
+public class TheoryHolderImpl implements PdfHolder<Theory> {
 
 	private Theory pdf;
 
@@ -43,6 +43,6 @@ public class PdfHolderImpl implements PdfHolder {
 
 	@Override
 	public void reload() throws IOException {
-		pdf = loader.load(null, props.getProperty("theory.file.name"));
+		pdf = (Theory) loader.load(props.getProperty("theory.file.directory"), props.getProperty("theory.file.name"));
 	}
 }

@@ -38,8 +38,10 @@ public class FileUtils {
 
 		final File file = new File(fileName);
 		try {
-			org.apache.commons.io.FileUtils.copyInputStreamToFile(is, file);
-			file.deleteOnExit();
+			if (!file.exists()) {
+				org.apache.commons.io.FileUtils.copyInputStreamToFile(is, file);
+				file.deleteOnExit();
+			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

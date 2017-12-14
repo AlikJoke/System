@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import javax.validation.constraints.NotNull;
 
+import ru.project.wtf.system.model.SystemObject;
+
 /**
  * Интерфейс работы с содержанием приложения (в виде картинок). Используется для
  * сохранения и получения картинок.
@@ -13,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * @since 24.10.2017
  *
  */
-public interface PdfHolder {
+public interface PdfHolder<T extends SystemObject<File>> {
 
 	/**
 	 * Возвращает список сохраненных ранее png.
@@ -27,7 +29,7 @@ public interface PdfHolder {
 	 *             если сохраненного объекта нет.
 	 */
 	@NotNull
-	Theory getPdf();
+	T getPdf();
 
 	/**
 	 * Возвращает количество страниц pdf.

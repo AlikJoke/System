@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -14,9 +15,9 @@ import javax.imageio.ImageIO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import ru.project.wtf.system.external.HasExternalSourceAbstract;
+import ru.project.wtf.system.model.SystemObject;
 import ru.project.wtf.system.utils.FileUtils;
 import ru.project.wtf.system.utils.NotNullOrEmpty;
 
@@ -24,15 +25,13 @@ import ru.project.wtf.system.utils.NotNullOrEmpty;
 public class PdfLoaderImpl extends HasExternalSourceAbstract implements PdfLoader {
 
 	@Override
-	public Theory load(final String directory, @NotNullOrEmpty final String fileName) {
-		final String path;
-		if (StringUtils.isEmpty(path = props.getProperty("theory.file.path"))) {
-			throw new RuntimeException();
-		}
+	public SystemObject<File> load(final String directory, @NotNullOrEmpty final String fileName) {
+		final String path = directory + "/" + fileName;
+		final boolean isTheory = Objects.equals(fileName, props.getProperty("theory.file.name"));
 
 		try {
 			final InputStream is;
-			File newFile = new File(props.getProperty("theory.file.name"));
+			File newFile = new File(fileName);
 			if (newFile.exists() && newFile.canRead()) {
 				is = new FileInputStream(newFile);
 			} else {
@@ -60,20 +59,20 @@ public class PdfLoaderImpl extends HasExternalSourceAbstract implements PdfLoade
 				file.deleteOnExit();
 			}
 
-			return new Theory(null, files);
+			return isTheory ? new Theory(null, files) : new Reference(null, files);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public void upload(Theory object) {
-		upload(object.getSourceFile());
+	public String getSourceKey() {
+		return "external.source.theory";
 	}
 
 	@Override
-	public String getSourceKey() {
-		return "external.source.theory";
+	public void upload(SystemObject<File> object) {
+
 	}
 
 }
