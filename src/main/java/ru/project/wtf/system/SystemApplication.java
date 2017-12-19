@@ -53,8 +53,6 @@ public class SystemApplication extends JavaFxApplication {
 		primaryStage.centerOnScreen();
 		primaryStage.setMinHeight(400);
 		primaryStage.setMinWidth(400);
-		primaryStage.setMaxHeight(500);
-		primaryStage.setMaxWidth(500);
 		primaryStage.show();
 	}
 
@@ -70,18 +68,14 @@ public class SystemApplication extends JavaFxApplication {
 
 		if (Objects.equals("mainView", beanName)) {
 			stageHolder.getStage().setResizable(true);
-			stageHolder.getStage().setMinHeight(700);
-			stageHolder.getStage().setMinWidth(900);
 			stageHolder.getStage().setMaximized(true);
-			stageHolder.getStage().centerOnScreen();
 			stageHolder.getStage().setTitle(props.getProperty("fx.ui.main.title"));
 		} else {
 			stageHolder.getStage().centerOnScreen();
-			stageHolder.getStage().setMinHeight(400);
-			stageHolder.getStage().setMinWidth(400);
-			stageHolder.getStage().setMaxHeight(500);
-			stageHolder.getStage().setMaxWidth(500);
+			stageHolder.getStage().setMaxHeight(431);
+			stageHolder.getStage().setMaxWidth(410);
 			stageHolder.getStage().setResizable(false);
+			stageHolder.getStage().setTitle(props.getProperty("fx.ui.title"));
 		}
 		
 		view.getController().refresh();

@@ -58,7 +58,7 @@ public class PdfLoaderImpl extends HasExternalSourceAbstract implements PdfLoade
 				files.add(file);
 				file.deleteOnExit();
 			}
-
+			pdf.close();
 			return isTheory ? new Theory(null, files) : new Reference(null, files);
 		} catch (IOException e) {
 			throw new RuntimeException(e);

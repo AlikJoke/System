@@ -50,6 +50,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import ru.project.wtf.system.SystemApplication;
+import ru.project.wtf.system.model.StageHolder;
 import ru.project.wtf.system.modeling.ParametersProperties;
 import ru.project.wtf.system.pdf.PdfHolder;
 import ru.project.wtf.system.pdf.Reference;
@@ -190,12 +191,21 @@ public class MainController extends BaseController {
 	@FXML
 	private LineChart<Number, Number> chartDensityNTimeXe;
 
+	@FXML
+	private LineChart<Number, Number> chartConcetrationITime;
+
+	@FXML
+	private LineChart<Number, Number> chartConcetrationXeTime;
+
 	private boolean labelIsVisibleXe;
 	private ParametersProperties parametersXE = new ParametersProperties();
 	private TextField[] arrayOfTextFieldXE = new TextField[8];
 	@SuppressWarnings("rawtypes")
 	private XYChart.Series seriesChartXe;
 
+	private XYChart.Series seriesXe;
+
+	private XYChart.Series seriesI;
 	@FXML
 	private Button modelingSmButton;
 
@@ -322,10 +332,16 @@ public class MainController extends BaseController {
 			nodes.add(tf);
 		}
 
-		final Label answer = new Label(null);
-		answer.setVisible(false);
+		final boolean isStudent = securutyContext.getAuthUser().isStudent();
+		final Label answer = new Label("Правильный ответ: " +
+				StringUtils.collectionToCommaDelimitedString(question.getAnswer()));
+		answer.setVisible(!isStudent);
 
 		nodes.add(answer);
+
+		if (!isStudent) {
+			nodes.add(new Label(null));
+		}
 
 		box.getChildren().addAll(nodes);
 	}
@@ -342,6 +358,8 @@ public class MainController extends BaseController {
 		});
 
 		chartDensityNTimeXe.setAnimated(true);
+		chartConcetrationITime.setAnimated(true);
+		chartConcetrationXeTime.setAnimated(true);
 		chartDensityNTimeSm.setAnimated(true);
 		minutesPropertiesFirst.minute = STARTMINUTESFIRST;
 		secondsPropertiesFirst.second = STARTSECONDSFIRST;
@@ -593,6 +611,9 @@ public class MainController extends BaseController {
 		}
 	}
 
+	@Autowired
+	private StageHolder stageHolder;
+
 	@FXML
 	public void actionButtonPressed() {
 		securutyContext.logout();
@@ -685,8 +706,14 @@ public class MainController extends BaseController {
 		errorModelingXe.setVisible(false);
 		labelIsVisibleXe = false;
 		chartDensityNTimeXe.getData().clear();
+		chartConcetrationITime.getData().clear();
+		chartConcetrationXeTime.getData().clear();
 		seriesChartXe = new XYChart.Series();
+		seriesI = new XYChart.Series();
+		seriesXe = new XYChart.Series();
 		seriesChartXe.setName("Мощность Ядерного Реактора");
+		seriesI.setName("Концентрация I(t)");
+		seriesXe.setName("Концентрация Xe(t)");
 		fillArrayOfTextFieldXE();
 		if (!parametersXE.stringToDouble(arrayOfTextFieldXE)) {
 			errorModelingXe.setVisible(true);
@@ -694,7 +721,7 @@ public class MainController extends BaseController {
 		}
 		if (!labelIsVisibleXe)
 			parametersXE.drawChartOfPoints(chartDensityNTimeXe, seriesChartXe);
-
+			parametersXE.drawXIEModel(chartConcetrationITime, chartConcetrationXeTime, seriesI, seriesXe);
 	}
 
 	@SuppressWarnings("rawtypes")

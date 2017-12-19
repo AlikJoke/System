@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ru.project.wtf.system.properties.Properties;
+import ru.project.wtf.system.user.SecurityContext;
 
 @Component("referenceHolder")
 public class ReferenceHolderImpl implements PdfHolder<Reference> {
 
 	private Reference pdf;
+	private Reference pdfStudent;
 
 	@Autowired
 	private Properties props;
@@ -21,9 +23,12 @@ public class ReferenceHolderImpl implements PdfHolder<Reference> {
 	@Autowired
 	private PdfLoader loader;
 
+	@Autowired
+	private SecurityContext security;
+
 	@Override
 	public Reference getPdf() {
-		return pdf;
+		return security.getAuthUser().isStudent() ? pdfStudent : pdf;
 	}
 
 	@PostConstruct
@@ -45,5 +50,7 @@ public class ReferenceHolderImpl implements PdfHolder<Reference> {
 	public void reload() throws IOException {
 		pdf = (Reference) loader.load(props.getProperty("reference.file.directory"),
 				props.getProperty("reference.file.name"));
+		pdfStudent = (Reference) loader.load(props.getProperty("reference.file.directory"),
+				props.getProperty("reference.student.file.name"));
 	}
 }

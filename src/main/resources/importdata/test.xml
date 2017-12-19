@@ -5,32 +5,42 @@
 	<first-test-time>7</first-test-time>
 	<second-test-time>20</second-test-time>
 	<question-block>
-		<question>Вопрос 1</question>
+		<question>Отравление реактора это</question>
 		<complexity>1</complexity>
-		<answer>10</answer>
-	</question-block>
-	<question-block>
-		<question>Вопрос 2</question>
-		<complexity>1</complexity>
-		<answer>66</answer>
-	</question-block>
-	<question-block>
-		<question>Вопрос 3</question>
-		<complexity>1</complexity>
-		<answer>Нет</answer>
-	</question-block>
-	<question-block>
-		<question>Вопрос 4</question>
-		<complexity>1</complexity>
-		<variant id="1">Первый ответ</variant>
-		<variant id="2">Второй ответ</variant>
+		<variant id="1">Поглощение нейтронов короткоживущими нуклидами</variant>
+		<variant id="2">Поглощение нейтронов долгоживущими и стабильными нуклидами</variant>
 		<answer>1</answer>
-		<answer>2</answer>
+	</question-block>
+	<question-block>
+		<question>Как изменяется запас реактивности при отравлении реактора ксеноном</question>
+		<complexity>1</complexity>
+		<variant id="1">Снижается</variant>
+		<variant id="2">Возрастает</variant>
+		<variant id="3">Не меняется</variant>
+		<variant id="4">Реактивность не имеет отношение к данному процессу</variant>
+		<answer>1</answer>
+	</question-block>
+	<question-block>
+		<question>Как образуется изотоп 135Xe в ядерном реакторе</question>
+		<variant id="1">Как осколок деления 235U</variant>
+		<variant id="2">Как дочерний продукт β-распада 135J
+</variant>
+		<variant id="3">Оба варианта</variant>
+		<complexity>1</complexity>
+		<answer>3</answer>
+	</question-block>
+	<question-block>
+		<question>Уменьшение концентрации 135Xe происходит за счет</question>
+		<complexity>1</complexity>
+		<variant id="1">Захвата нейтронов</variant>
+		<variant id="2">Радиоактивного распада</variant>
+		<variant id="3">Оба варианта</variant>
+		<answer>3</answer>
 	</question-block>
 	<question-block>
 		<question>Вопрос 5</question>
 		<complexity>1</complexity>
-		<answer>ррррр</answer>
+		<answer>2</answer>
 	</question-block>
 	<question-block>
 		<question>Вопрос 6</question>
@@ -39,44 +49,45 @@
 		<variant id="2">Второй ответ 2</variant>
 		<answer>2</answer>
 	</question-block>
-	
 	<question-block>
-		<question>Вопрос 2__1</question>
-		<variant id="1">Первый ответ</variant>
+		<question>Стационарное отравление ксеноном имеет место в случае, когда</question>
+		<variant id="1">Ядерные концентрации 135J и 135Xe достигают своих равновесных значений и перестают изменяться</variant>
 		<variant id="2">Второй ответ</variant>
+		<complexity>2</complexity>
+		<answer>1</answer>
+	</question-block>
+	<question-block>
+		<question>При снижении мощности реактора концентрация 135Xe будет</question>
+		<image-name>graph1.png</image-name>
+		<variant id="1">Увеличиваться</variant>
+		<variant id="2">Сначала уменьшаться, затем увеличиваться</variant>
+		<variant id="3">Уменьшаться</variant>
+		<variant id="4">Сначала уменьшаться, затем увеличиваться</variant>
 		<complexity>2</complexity>
 		<answer>2</answer>
 	</question-block>
 	<question-block>
-		<question>Вопрос 2_2</question>
-		<image-name>graph1.png</image-name>
-		<variant id="1">Первый ответ</variant>
-		<variant id="2">Второй ответ</variant>
-		<variant id="3">Третий ответ</variant>
-		<variant id="4">Четвертый ответ</variant>
+		<question>При повышении мощности реактора концентрация 135Xe будет</question>
+		<variant id="1">Увеличиваться</variant>
+		<variant id="2">Сначала уменьшаться, затем увеличиваться</variant>
+		<variant id="3">Уменьшаться</variant>
+		<variant id="4">Сначала уменьшаться, затем увеличиваться</variant>
 		<complexity>2</complexity>
 		<answer>4</answer>
 	</question-block>
 	<question-block>
-		<question>Вопрос 2_3</question>
-		<variant id="1">Первый ответ</variant>
-		<variant id="2">Второй ответ</variant>
-		<variant id="3">Третий ответ</variant>
-		<variant id="4">Четвертый ответ</variant>
-		<complexity>2</complexity>
+		<question>Как образуется изотоп 149Sm в ядерном реакторе</question>
+		<variant id="1">В результате распада изотопа 149Nd</variant>
+		<variant id="2">Как дочерний продукт β-распада 149Pm</variant>
+		<variant id="3">Оба варианта</variant>
+		<complexity>3</complexity>
 		<answer>3</answer>
 	</question-block>
 	<question-block>
-		<question>Вопрос 3_1</question>
-		<variant id="1">Первый ответ</variant>
-		<variant id="2">Второй ответ</variant>
+		<question>Стационарное отравление самарием имеет место в случае, когда</question>
+		<variant id="1">Ядерные концентрации 135J и 135Xe достигают своих равновесных значений и перестают изменяться</variant>
 		<complexity>3</complexity>
-		<answer>2</answer>
-	</question-block>
-	<question-block>
-		<question>Вопрос 3_2</question>
-		<complexity>3</complexity>
-		<answer>9888</answer>
+		<answer>1</answer>
 	</question-block>
 	<question-block>
 		<question>Вопрос 3_3</question>
