@@ -53,6 +53,8 @@ public class ParametersProperties {
 		} catch (Exception e) {
 			return false;
 		}
+		if ((phi0<0 || a1<0 || a2<0 || a3<0 || t1<0 || t2<0 || t3<0 || t4<0) || (t1>=t2 || t2>=t3 || t3>=t4))
+			return false;
 		return true;
 	}
 

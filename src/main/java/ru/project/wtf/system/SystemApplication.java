@@ -28,6 +28,9 @@ public class SystemApplication extends JavaFxApplication {
 
 	@Autowired
 	private StageHolder stageHolder;
+	
+	private Stage mainStage;
+	private Stage authStage;
 
 	private static SystemApplication instance;
 
@@ -61,23 +64,43 @@ public class SystemApplication extends JavaFxApplication {
 		if (view == null) {
 			throw new IllegalArgumentException("View can't be null! Check bean name!");
 		}
-
-		final Parent page = view.getView();
-		stageHolder.getStage().getScene().setRoot(page);
-		stageHolder.getStage().sizeToScene();
+		
+		final Parent root = view.getView();
 
 		if (Objects.equals("mainView", beanName)) {
+			authStage = stageHolder.getStage();
+			mainStage = new Stage();
+			installScene(mainStage, root);
+			stageHolder.holdStage(mainStage);
 			stageHolder.getStage().setResizable(true);
 			stageHolder.getStage().setMaximized(true);
 			stageHolder.getStage().setTitle(props.getProperty("fx.ui.main.title"));
+			authStage.hide();
+			mainStage.show();
+			
 		} else {
+			installScene(authStage, root);
+			stageHolder.holdStage(authStage);
 			stageHolder.getStage().centerOnScreen();
 			stageHolder.getStage().setMaxHeight(431);
 			stageHolder.getStage().setMaxWidth(410);
 			stageHolder.getStage().setResizable(false);
 			stageHolder.getStage().setTitle(props.getProperty("fx.ui.title"));
+			mainStage.hide();
+			authStage.show();
 		}
 		
 		view.getController().refresh();
+	}
+	
+	private void installScene(Stage stage, Parent root){
+		if (root.getScene() == null) {
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+		}
+		else {
+			stage.setScene(root.getScene());
+		}
+		stage.getIcons().add(new Image("img/kaf22.ico"));
 	}
 }

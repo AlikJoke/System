@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
@@ -51,12 +50,13 @@ public class PdfLoaderImpl extends HasExternalSourceAbstract implements PdfLoade
 			final int count = pdf.getDocumentCatalog().getPages().getCount();
 
 			for (int i = 0; i < count; i++) {
-				final File file = new File(
-						UUID.randomUUID().toString() + FileUtils.getExtensionWithDot(FileUtils.PNG_EXTENSION));
-				BufferedImage image = renderer.renderImage(i);
-				ImageIO.write(image, FileUtils.PNG_EXTENSION, file);
+				final File file = new File(i + (newFile.exists() ? "_downloaded_" : "_native_") + fileName
+						+ FileUtils.getExtensionWithDot(FileUtils.PNG_EXTENSION));
+				if (!file.exists()) {
+					BufferedImage image = renderer.renderImage(i);
+					ImageIO.write(image, FileUtils.PNG_EXTENSION, file);
+				}
 				files.add(file);
-				file.deleteOnExit();
 			}
 			pdf.close();
 			return isTheory ? new Theory(null, files) : new Reference(null, files);

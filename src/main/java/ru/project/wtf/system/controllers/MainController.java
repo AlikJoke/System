@@ -295,6 +295,7 @@ public class MainController extends BaseController {
 		Collections.shuffle(test.getObjects());
 		test.getObjects().stream().filter(question -> question.getComplexity() == 1)
 				.limit(test.getFirstTestQuestionsCount()).forEach(question -> loadQuestion(question, firstTestVBox));
+		firstTestVBox.setVisible(true);
 	}
 
 	private void loadSecondTestToPane() {
@@ -307,6 +308,7 @@ public class MainController extends BaseController {
 				.forEach(question -> loadQuestion(question, secondTestVBox));
 		test.getObjects().stream().filter(question -> question.getComplexity() == 3).limit(2)
 				.forEach(question -> loadQuestion(question, secondTestVBox));
+		firstTestVBox.setVisible(true);
 	}
 
 	private void loadQuestion(Question question, VBox box) {
@@ -356,11 +358,13 @@ public class MainController extends BaseController {
 				imageView.setFitHeight(zoomProperty.get() * 3);
 			}
 		});
-
+		
 		chartDensityNTimeXe.setAnimated(true);
 		chartConcetrationITime.setAnimated(true);
 		chartConcetrationXeTime.setAnimated(true);
 		chartDensityNTimeSm.setAnimated(true);
+		modelingXeAction();
+		modelingSmAction();
 		minutesPropertiesFirst.minute = STARTMINUTESFIRST;
 		secondsPropertiesFirst.second = STARTSECONDSFIRST;
 		minutesPropertiesSecond.minute = STARTMINUTESSECOND;
@@ -699,10 +703,7 @@ public class MainController extends BaseController {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void modelingXeAction(ActionEvent actionEvent) {
-		Object source = actionEvent.getSource();
-		if (!(source instanceof Button))
-			return;
+	public void modelingXeAction() {
 		errorModelingXe.setVisible(false);
 		labelIsVisibleXe = false;
 		chartDensityNTimeXe.getData().clear();
@@ -719,16 +720,14 @@ public class MainController extends BaseController {
 			errorModelingXe.setVisible(true);
 			labelIsVisibleXe = true;
 		}
-		if (!labelIsVisibleXe)
+		if (!labelIsVisibleXe) {
 			parametersXE.drawChartOfPoints(chartDensityNTimeXe, seriesChartXe);
 			parametersXE.drawXIEModel(chartConcetrationITime, chartConcetrationXeTime, seriesI, seriesXe);
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void modelingSmAction(ActionEvent actionEvent) {
-		Object source = actionEvent.getSource();
-		if (!(source instanceof Button))
-			return;
+	public void modelingSmAction() {
 		errorModelingSm.setVisible(false);
 		labelIsVisibleSm = false;
 		chartDensityNTimeSm.getData().clear();
@@ -739,8 +738,9 @@ public class MainController extends BaseController {
 			errorModelingSm.setVisible(true);
 			labelIsVisibleSm = true;
 		}
-		if (!labelIsVisibleSm)
+		if (!labelIsVisibleSm) {
 			parametersSM.drawChartOfPoints(chartDensityNTimeSm, seriesChartSm);
+		}
 	}
 
 	private void startTimer(Label label, MinuteProperties min, SecondProperties sec) {

@@ -212,21 +212,21 @@ public class AuthController extends BaseController {
 			surnameField.setStyle("-fx-border-color: #ff0000; -fx-border-width: 1px; -fx-border-radius: 3px");
 		}
 
-		if (withErrors |= StringUtils.isEmpty(nameField.getText())) {
+		else if (withErrors |= StringUtils.isEmpty(nameField.getText())) {
 			surnameField.setStyle("-fx-border: none");
 			errorSecondLabel.setText("Укажите Ваше Имя");
 			errorSecondLabel.setVisible(true);
 			nameField.setStyle("-fx-border-color: #ff0000; -fx-border-width: 1px; -fx-border-radius: 3px");
 		}
 
-		if (withErrors |= StringUtils.isEmpty(groupField.getText())) {
+		else if (withErrors |= StringUtils.isEmpty(groupField.getText())) {
 			surnameField.setStyle("-fx-border: none");
 			nameField.setStyle("-fx-border: none");
 			errorSecondLabel.setText("Укажите Вашу Группу");
 			errorSecondLabel.setVisible(true);
 			groupField.setStyle("-fx-border-color: #ff0000; -fx-border-width: 1px; -fx-border-radius: 3px");
 		}
-		if (!withErrors) {
+		else {
 			errorSecondLabel.setVisible(false);
 			surnameField.setStyle("-fx-border: none");
 			nameField.setStyle("-fx-border: none");
